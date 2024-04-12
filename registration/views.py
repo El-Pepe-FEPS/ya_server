@@ -1,21 +1,27 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.views.decorators.csrf import get_token
+from django.http import JsonResponse
 from .models import CustomUser
+from .utils import generate_username
+
+
+def get_csrf(request):
+    return JsonResponse({"token": get_token(request)})
 
 
 def login_view(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         email = request.POST["email"]
         password = request.POST["password"]
-        user = authenticate(request, username=email, password=password)
+        username = CustomUser.objects.get(email=email).username
+        user = authenticate(request, username=username, password=password)
+
         if user is not None:
             login(request, user)
         else:
-            error_message = "Invalid username or password."
-            return None
+            return JsonResponse({"message": "Invalid username or password."})
 
-        return HttpResponse(request, {"email": email, "password": password})
+        return JsonResponse(user.toJSON())
 
 
 def logout_view(request):
@@ -23,11 +29,17 @@ def logout_view(request):
 
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         email = request.POST["email"]
         password = request.POST["password"]
 
-        user = CustomUser.objects.create_user(email=email, password=password)
+        username = generate_username()
 
-    else:
-        return HttpResponse(request)
+        if CustomUser.objects.filter(email=email).exists():
+            return JsonResponse({"message": "Email is already in use."})
+
+        user = CustomUser.objects.create_user(
+            username=username, email=email, password=password
+        )
+
+        return JsonResponse(user.toJSON())
