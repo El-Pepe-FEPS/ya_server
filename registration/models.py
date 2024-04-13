@@ -1,13 +1,13 @@
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
-    PermissionsMixin,
+    PermissionsMixin, AbstractUser,
 )
 from django.db import models
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
@@ -32,17 +32,22 @@ class Role(models.Model):
     title = models.CharField(max_length=50)
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class Category(models.Model):
+    title = models.CharField(max_length=50)
+
+
+class CustomUser(AbstractUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=150)
     surname = models.CharField(max_length=150)
+    username = None
     patronymic = models.CharField(max_length=150)
-    status = models.ForeignKey(Role, max_length=50, on_delete=models.CASCADE)
-    bio = models.TextField()
+    role = models.ForeignKey(Role, max_length=50, on_delete=models.CASCADE, null=True)
+    bio = models.TextField(null=True)
     phone_number = models.CharField(max_length=15)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    date_at = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()
 

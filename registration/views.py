@@ -8,14 +8,20 @@ from .serializers import UserSerializer
 
 class LoginView(APIView):
     def post(self, request):
-        email = CustomUser.objects.get(email=request.data["email"]).email
 
-        user = authenticate(
-            request, email=email, password=request.data["password"]
-        )
+        print(request.data)
+        user = CustomUser.objects.get(email=request.data['email'])
+
+        # user.set_password(request.data['password'])
+        # user.save()
+        # user = authenticate(
+        #     request, email=request.data['email'], password=request.data["password"]
+        # )
+        # print(request.data['email'], request.data["password"])
+        # print(user)
 
         if user is None:
-            return Response({"message": "Invalid username or password."})
+            return Response({"message": "Invalid email or password."})
 
         login(request, user)
 
@@ -31,12 +37,14 @@ class RegisterView(APIView):
             data={
                 "name": request.data["name"],
                 "surname": request.data["surname"],
+                "username": request.data["email"],
                 "patronymic": request.data["patronymic"],
                 "email": request.data["email"],
                 "phone_number": request.data["phone_number"],
                 "password": request.data["password"],
             }
         )
+        print(serializer)
 
         serializer.is_valid(raise_exception=True)
 
