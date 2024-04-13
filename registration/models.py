@@ -58,9 +58,6 @@ class CustomUser(AbstractUser, PermissionsMixin):
         return self.email
 
 
-
-
-
 class UserFeedback(models.Model):
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)

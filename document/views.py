@@ -14,8 +14,11 @@ class DocumentView(APIView):
                 "user_id": request.user.id
             }
         )
-
+        print("user id: ", request.user)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        return Response(serializer.data)
 
 
 class CSRFView(APIView):
