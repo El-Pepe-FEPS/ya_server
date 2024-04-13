@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import get_token
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import CustomUser
@@ -31,28 +32,28 @@ class LoginView(APIView):
 
 class RegisterView(APIView):
     def post(self, request):
+        required_fields = ['name', 'surname', 'patronymic', 'email', 'phone_number', 'password']
+        d = {"message":[]}
+        for field in required_fields:
+            if field not in request.data:
+                d["message"].append(f"The field '{field.capitalize()}' is required.")
+            print(request.data[field], len(request.data[field]))
+            if request.data[field] == "":
+                d["message"].append(f"The field '{field.capitalize()}' is required.")
+        return Response(d, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = UserSerializer(
-            data={
-                "name": request.data["name"],
-                "surname": request.data["surname"],
-                "username": request.data["email"],
-                "patronymic": request.data["patronymic"],
-                "email": request.data["email"],
-                "phone_number": request.data["phone_number"],
-                "password": request.data["password"],
-            }
-        )
-        print(serializer)
+        serializer = UserSerializer(data=request.data)
 
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if CustomUser.objects.filter(email=request.data["email"][0]).exists():
-            return Response({"message": "Email is already in use."})
+        email = request.data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            return Response({"message": "Email is already in use."}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer.save()
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class CSRFView(APIView):
