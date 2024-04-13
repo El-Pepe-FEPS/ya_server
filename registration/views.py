@@ -1,45 +1,52 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import get_token
-from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .models import CustomUser
 from .utils import generate_username
+from .serializers import UserSerializer
 
 
-def get_csrf(request):
-    return JsonResponse({"token": get_token(request)})
+class LoginView(APIView):
+    def post(self, request):
+        username = CustomUser.objects.get(email=request.data["email"]).username
 
-
-def login_view(request):
-    if request.method == "POST":
-        email = request.POST["email"]
-        password = request.POST["password"]
-        username = CustomUser.objects.get(email=email).username
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-        else:
-            return JsonResponse({"message": "Invalid username or password."})
-
-        return JsonResponse(user.toJSON())
-
-
-def logout_view(request):
-    logout(request)
-
-
-def register(request):
-    if request.method == "POST":
-        email = request.POST["email"]
-        password = request.POST["password"]
-
-        username = generate_username()
-
-        if CustomUser.objects.filter(email=email).exists():
-            return JsonResponse({"message": "Email is already in use."})
-
-        user = CustomUser.objects.create_user(
-            username=username, email=email, password=password
+        user = authenticate(
+            request, username=username, password=request.data["password"]
         )
 
-        return JsonResponse(user.toJSON())
+        if user is None:
+            return Response({"message": "Invalid username or password."})
+
+        login(request, user)
+
+        serialized_user = UserSerializer(user)
+
+        return Response(serialized_user.data)
+
+
+class RegisterView(APIView):
+    def post(self, request):
+        username = generate_username()
+
+        serializer = UserSerializer(
+            data={
+                "email": request.data["email"],
+                "password": request.data["password"],
+                "username": username,
+            }
+        )
+
+        serializer.is_valid(raise_exception=True)
+
+        if CustomUser.objects.filter(email=request.data["email"][0]).exists():
+            return Response({"message": "Email is already in use."})
+
+        serializer.save()
+
+        return Response(serializer.data)
+
+
+class CSRFView(APIView):
+    def get(self, request):
+        return Response({"token": get_token(request)})

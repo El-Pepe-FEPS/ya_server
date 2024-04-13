@@ -4,7 +4,6 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.db import models
-from datetime import datetime
 
 
 class CustomUserManager(BaseUserManager):
@@ -40,19 +39,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
-
-    def toJSON(self):
-        data = {}
-        for field in self._meta.fields:
-            field_name = field.name
-            field_value = getattr(self, field_name)
-            if isinstance(field_value, datetime):
-                data[field_name] = field_value.isoformat()
-            elif isinstance(field_value, models.Model):
-                data[field_name] = field_value.toJSON()
-            else:
-                data[field_name] = field_value
-        return data
 
     def __str__(self):
         return self.email
