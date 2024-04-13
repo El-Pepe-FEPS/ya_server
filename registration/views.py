@@ -37,10 +37,10 @@ class RegisterView(APIView):
         for field in required_fields:
             if field not in request.data:
                 d["message"].append(f"The field '{field.capitalize()}' is required.")
-            print(request.data[field], len(request.data[field]))
+                return Response(d, status=status.HTTP_400_BAD_REQUEST)
             if request.data[field] == "":
                 d["message"].append(f"The field '{field.capitalize()}' is required.")
-        return Response(d, status=status.HTTP_400_BAD_REQUEST)
+                return Response(d, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = UserSerializer(data=request.data)
 
