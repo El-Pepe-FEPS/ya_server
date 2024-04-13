@@ -9,12 +9,11 @@ class PostView(APIView):
 
     def post(self, request):
         serializer = PostSerializer(data={
-            'user': request.user.id,
             'title': request.data['title'],
             'description': request.data['description'],
             'category': request.data['category'],
             'type': request.data['type'],
-        })
+        }, context={'request': request})
 
         serializer.is_valid(raise_exception=True)
         serializer.save()
