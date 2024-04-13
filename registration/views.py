@@ -35,7 +35,6 @@ class RegisterView(APIView):
                 "email": request.data["email"],
                 "phone_number": request.data["phone_number"],
                 "password": request.data["password"],
-                "bio": request.data["bio"],
             }
         )
 
