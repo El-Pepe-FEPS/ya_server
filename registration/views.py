@@ -3,16 +3,15 @@ from django.views.decorators.csrf import get_token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import CustomUser
-from .utils import generate_username
 from .serializers import UserSerializer
 
 
 class LoginView(APIView):
     def post(self, request):
-        username = CustomUser.objects.get(email=request.data["email"]).username
+        email = CustomUser.objects.get(email=request.data["email"]).email
 
         user = authenticate(
-            request, username=username, password=request.data["password"]
+            request, email=email, password=request.data["password"]
         )
 
         if user is None:
@@ -27,13 +26,16 @@ class LoginView(APIView):
 
 class RegisterView(APIView):
     def post(self, request):
-        username = generate_username()
 
         serializer = UserSerializer(
             data={
+                "name": request.data["name"],
+                "surname": request.data["surname"],
+                "patronymic": request.data["patronymic"],
                 "email": request.data["email"],
+                "phone_number": request.data["phone_number"],
                 "password": request.data["password"],
-                "username": username,
+                "bio": request.data["bio"],
             }
         )
 
