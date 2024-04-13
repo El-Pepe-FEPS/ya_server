@@ -42,3 +42,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Document(models.Model):
+    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    doc_image = models.ImageField() #edit
+    doc_title = models.CharField(max_length=150)
