@@ -150,3 +150,4 @@ CORS_ALLOWED_ORIGINS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "registration.CustomUser"
+AUTHENTICATION_METHOD = "email"
