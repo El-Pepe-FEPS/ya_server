@@ -28,16 +28,29 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+class Role(models.Model):
+    title = models.CharField(max_length=50)
+
+
+class Category(models.Model):
+    title = models.CharField(max_length=50)
+
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=150, unique=True)
+    name = models.CharField(max_length=150)
+    surname = models.CharField(max_length=150)
+    patronymic = models.CharField(max_length=150)
+    status = models.ForeignKey(Role, max_length=50, on_delete=models.CASCADE)
+    bio = models.TextField()
+    phone_number = models.CharField(max_length=15)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     def __str__(self):
@@ -46,5 +59,19 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Document(models.Model):
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    doc_image = models.ImageField() #edit
+    doc_image = models.ImageField()
     doc_title = models.CharField(max_length=150)
+
+
+class HelpRequest(models.Model):
+    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class UserFeedback(models.Model):
+    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=150)
+    description = models.TextField()
