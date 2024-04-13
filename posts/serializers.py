@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import HelpRequest, Category
+from .models import Post, Category
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -8,14 +8,14 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'title')
 
 
-class HelpRequestSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
 
     class Meta:
-        model = HelpRequest
-        fields = ("user", "title", "description", "category")
+        model = Post
+        fields = ("user", "title", "description", "category", "type")
 
     def create(self, validated_data):
         category_data = validated_data.pop('category')
         category_instance = Category.objects.get(title=category_data.get("title"))
-        return HelpRequest.objects.create(category=category_instance, **validated_data)
+        return Post.objects.create(category=category_instance, **validated_data)

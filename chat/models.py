@@ -1,12 +1,12 @@
 from django.db import models
 
-from posts.models import Post
+#from posts.models import Post
 from registration.models import CustomUser
 
 
 # Create your models here.
 class Chat(models.Model):
-    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
+    #post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Chat {self.id}"
