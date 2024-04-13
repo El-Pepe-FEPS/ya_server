@@ -8,20 +8,19 @@ from .serializers import UserSerializer
 
 class LoginView(APIView):
     def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
 
-        print(request.data)
-        user = CustomUser.objects.get(email=request.data['email'])
+        if not email or not password:
+            return Response({"message": "Email and password are required."}, status=400)
 
-        # user.set_password(request.data['password'])
-        # user.save()
-        # user = authenticate(
-        #     request, email=request.data['email'], password=request.data["password"]
-        # )
-        # print(request.data['email'], request.data["password"])
-        # print(user)
+        try:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            return Response({"message": "Invalid email or password."}, status=400)
 
-        if user is None:
-            return Response({"message": "Invalid email or password."})
+        if not user.check_password(password):
+            return Response({"message": "Invalid email or password."}, status=400)
 
         login(request, user)
 
