@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     "document",
     "posts",
     "rest_framework",
-    "chat"
+    "chat",
     "user_profile",
 ]
 
