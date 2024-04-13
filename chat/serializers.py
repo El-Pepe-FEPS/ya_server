@@ -9,14 +9,14 @@ class ChatSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    chat = ChatSerializer(read_only=True)
+    chat = ChatSerializer()
 
     class Meta:
         model = Message
         fields = ('user', 'content', 'chat')
 
-    # def create(self, validated_data):
-    #     print(validated_data)
-    #     chat_data = validated_data.pop['chat']
-    #     chat_instance = Chat.objects.get(id=chat_data.get('id'))
-    #     return Message.objects.create(chat=chat_instance, **validated_data)
+    def create(self, validated_data):
+        chat_data = validated_data.pop('chat')
+        chat_instance, _ = Chat.objects.get_or_create(**chat_data)
+        message = Message.objects.create(chat=chat_instance, **validated_data)
+        return message
