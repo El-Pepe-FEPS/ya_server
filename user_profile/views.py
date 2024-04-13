@@ -1,9 +1,5 @@
-from django.core import serializers
-from django.views.decorators.csrf import get_token
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from registration.models import CustomUser
-from rest_framework.generics import ListAPIView
 from rest_framework import status
 from registration.serializers import UserSerializer
 

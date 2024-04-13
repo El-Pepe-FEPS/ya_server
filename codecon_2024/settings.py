@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "chat",
     "user_profile",
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -148,6 +149,20 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+    }
+}
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'ya-project-420219-734915ff79b4.json')
+)
+GS_BUCKET_NAME = 'ya_storage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
