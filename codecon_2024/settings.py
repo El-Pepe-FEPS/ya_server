@@ -64,7 +64,6 @@ INSTALLED_APPS = [
     "document",
     "posts",
     "rest_framework",
-    "helpoffer",
     "chat"
     "user_profile",
 ]
@@ -148,7 +147,7 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
-
+CORS_ALLOW_CREDENTIALS = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
