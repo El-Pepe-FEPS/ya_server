@@ -7,6 +7,13 @@ psychological support, medical attention, shelter and many other aspects.
 
 Team "El Pepe Reborn" for CodeCon 2024
 
+## Getting Started:
+To run Ya (server version) locally, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/El-Pepe-FEPS/ya_server.git`
+2. Install dependencies: `pip install -r requirements.txt`
+3. Run the development server: `python manage.py runserver`
+
 ## Features
 
 - **User Profile**: users are able to register, choose their status as a victim of a war, volunteer, etc.
@@ -18,6 +25,8 @@ Team "El Pepe Reborn" for CodeCon 2024
 
 - **Front-End**: React, Material UI, Redux
 - **Back-end**: Django, Django REST Framework
+
+
 
 
 

@@ -11,7 +11,7 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, username=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -36,11 +36,11 @@ class Category(models.Model):
     title = models.CharField(max_length=50)
 
 
-class CustomUser(AbstractUser, PermissionsMixin):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=150)
     surname = models.CharField(max_length=150)
-    username = None
+    username = models.CharField(max_length=150, default='user')
     patronymic = models.CharField(max_length=150)
     role = models.ForeignKey(Role, max_length=50, on_delete=models.CASCADE, null=True)
     bio = models.TextField(null=True)
