@@ -1,5 +1,5 @@
 from django.urls import path
-import views
+from document import views
 
 urlpatterns = [
     path("csrf/", views.CSRFView.as_view(), name="csrf"),
