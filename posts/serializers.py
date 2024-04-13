@@ -22,7 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ("user", "title", "description", "category", "type")
+        fields = ("user", "title", "description", "category", "type", "id")
 
     def create(self, validated_data):
         category_data = validated_data.pop('category')
