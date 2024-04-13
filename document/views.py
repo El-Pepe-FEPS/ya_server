@@ -11,10 +11,9 @@ class DocumentView(APIView):
             data={
                 "doc_image": request.data["doc_image"],
                 "doc_title": request.data["doc_title"],
-                "user_id": request.user.id
+                "user": request.user.id
             }
         )
-        print("user id: ", request.user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

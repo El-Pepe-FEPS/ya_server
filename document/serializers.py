@@ -5,4 +5,4 @@ from .models import Document
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ("doc_image", "doc_title", "user_id")
+        fields = ("doc_image", "doc_title", "user")
