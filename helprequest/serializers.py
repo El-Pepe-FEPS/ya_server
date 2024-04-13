@@ -3,7 +3,6 @@ from .models import HelpRequest, Category
 
 
 class CategorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Category
         fields = ('id', 'title')
@@ -14,7 +13,7 @@ class HelpRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HelpRequest
-        fields = ("title", "description", "category")
+        fields = ("user", "title", "description", "category")
 
     def create(self, validated_data):
         category_data = validated_data.pop('category')

@@ -31,9 +31,8 @@ class CustomUserManager(BaseUserManager):
 class Role(models.Model):
     title = models.CharField(max_length=50)
 
-
-class Category(models.Model):
-    title = models.CharField(max_length=50)
+    def __str__(self):
+        return self.title
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -62,3 +61,6 @@ class UserFeedback(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField()
+
+    def __str__(self):
+        return self.title
