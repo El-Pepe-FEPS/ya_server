@@ -15,14 +15,6 @@ class LoginView(APIView):
         if not email or not password:
             return Response({"message": "Email and password are required."}, status=400)
 
-        # try:
-        #     user = CustomUser.objects.get(email=email)
-        # except CustomUser.DoesNotExist:
-        #     return Response({"message": "Invalid email or password."}, status=400)
-        #
-        # if not user.check_password(password):
-        #     return Response({"message": "Invalid email or password."}, status=400)
-
         user = authenticate(username=email, password=password)
         if user is None:
             return Response({"message": "Invalid email or password."}, status=400)

@@ -1,5 +1,7 @@
 # Ya
 
+
+## About
 Ya is a project to help people, who suffered from the war. Its aim is to help the ones in need in different areas: 
 psychological support, medical attention, shelter and many other aspects.
 

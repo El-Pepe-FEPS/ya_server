@@ -62,9 +62,11 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "registration",
     "document",
-    "helprequest",
-    "user_profile",
+    "posts",
     "rest_framework",
+    "helpoffer",
+    "chat"
+    "user_profile",
 ]
 
 MIDDLEWARE = [

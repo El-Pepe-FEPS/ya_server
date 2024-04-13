@@ -28,11 +28,8 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class Role(models.Model):
+class Category(models.Model):
     title = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.title
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -41,12 +38,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     surname = models.CharField(max_length=150)
     username = models.CharField(max_length=150, default='user')
     patronymic = models.CharField(max_length=150)
-    role = models.ForeignKey(Role, max_length=50, on_delete=models.CASCADE, null=True)
     bio = models.TextField(null=True)
     phone_number = models.CharField(max_length=15)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_at = models.DateTimeField(auto_now_add=True)
+    verified = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 
