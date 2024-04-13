@@ -41,15 +41,17 @@ class RegisterView(APIView):
             if request.data[field] == "":
                 d["message"].append(f"The field '{field.capitalize()}' is required.")
                 return Response(d, status=status.HTTP_400_BAD_REQUEST)
+            if "@" not in request.data["email"]:
+                d["message"].append(f"Email address is not written correctly.")
+                return Response(d, status=status.HTTP_400_BAD_REQUEST)
+            if CustomUser.objects.filter(email=request.data.get('email')).exists():
+                d['message'].append("Email is already in use.")
+                return Response(d, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = UserSerializer(data=request.data)
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        email = request.data.get('email')
-        if CustomUser.objects.filter(email=email).exists():
-            return Response({"message": "Email is already in use."}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer.save()
 
