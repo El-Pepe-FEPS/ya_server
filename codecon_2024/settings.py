@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     "registration",
     "document",
     "helprequest",
-    "rest_framework"
+    "user_profile",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
