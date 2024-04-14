@@ -23,6 +23,8 @@ class DocumentView(APIView):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        request.user.verified = True
+        request.user.save()
 
         gcs = GoogleCloudStorage()
         file_path = serializer.data['doc_image']
