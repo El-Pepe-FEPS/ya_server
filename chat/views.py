@@ -38,10 +38,9 @@ class ChatView(APIView):
 class MessageView(APIView):
     def post(self, request, post_id, chat_id):
         serializer = MessageSerializer(data={
-            'user': request.user.id,
             'content': request.data['content'],
             'chat': {'id': chat_id, 'post': post_id}
-        })
+        }, context={'request': request})
 
         serializer.is_valid(raise_exception=True)
         serializer.save()

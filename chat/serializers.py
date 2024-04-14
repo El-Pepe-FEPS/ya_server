@@ -29,6 +29,7 @@ class ChatSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     chat = ChatSerializer()
+    user = UserForChatsSerializer(read_only=True)
 
     class Meta:
         model = Message
@@ -37,5 +38,6 @@ class MessageSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         chat_data = validated_data.pop('chat')
         chat_instance, _ = Chat.objects.get_or_create(**chat_data)
-        message = Message.objects.create(chat=chat_instance, **validated_data)
+        user = self.context['request'].user
+        message = Message.objects.create(chat=chat_instance, user=user, **validated_data)
         return message
