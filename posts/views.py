@@ -1,6 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
+
 from .serializers import PostSerializer, CategorySerializer
 from .models import Category, Post
 
@@ -15,7 +17,11 @@ class PostView(APIView):
             'type': request.data['type'],
         }, context={'request': request})
 
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as e:
+            missing_fields = ", ".join(e.detail.keys())
+            return Response({"message": f"Field(s) {missing_fields} must be filled"}, status=400)
         serializer.save()
 
         return Response(serializer.data)
