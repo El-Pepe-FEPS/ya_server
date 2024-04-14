@@ -4,7 +4,7 @@ from registration.models import CustomUser
 
 class Document(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    doc_image = models.CharField(max_length=200)
+    doc_image = models.ImageField()
     doc_title = models.CharField(max_length=150)
 
     def __str__(self):

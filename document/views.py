@@ -1,6 +1,8 @@
 from django.views.decorators.csrf import get_token
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from storages.backends.gcloud import GoogleCloudStorage
+
 from .serializers import DocumentSerializer
 from .models import Document
 
@@ -16,6 +18,10 @@ class DocumentView(APIView):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        gcs = GoogleCloudStorage()
+        file_path = serializer.data['doc_image']
+        gcs.save(file_path, request.data["doc_image"])
 
         return Response(serializer.data)
 
