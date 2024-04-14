@@ -1,4 +1,5 @@
 from django.views.decorators.csrf import get_token
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from storages.backends.gcloud import GoogleCloudStorage
@@ -9,6 +10,10 @@ from .models import Document
 
 class DocumentView(APIView):
     def post(self, request):
+        required_fields = ['doc_title', 'doc_image']
+        for field in required_fields:
+            if field not in request.data:
+                return Response({"message": f"Field {field.capitalize()} is required."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = DocumentSerializer(
             data={
                 "doc_image": request.data["doc_image"],
