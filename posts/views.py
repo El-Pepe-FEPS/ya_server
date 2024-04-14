@@ -29,7 +29,7 @@ class PostView(APIView):
 
 class RequestGetView(APIView):
     def get(self, request):
-        queryset = Post.objects.filter(type='help assistance').all()
+        queryset = Post.objects.filter(type='help request').all()
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
 

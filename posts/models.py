@@ -13,7 +13,7 @@ class Post(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     type = models.CharField(max_length=50, choices=[('help offer', 'Help Offer'),
-                                                    ('help assistance', 'Help Assistance')], default='help offer')
+                                                    ('help request', 'Help Request')], default='help request')
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)

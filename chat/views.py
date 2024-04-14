@@ -14,6 +14,8 @@ class ChatView(APIView):
         chat = Chat.objects.filter(post=post_id).first()
         if not chat:
             serializer = ChatSerializer(data={
+                'sender': request.user.id,
+                'recipient': post.user_id,
                 'post': post.id
             })
 
