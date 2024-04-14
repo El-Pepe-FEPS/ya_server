@@ -158,7 +158,7 @@ STORAGES = {
         "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
     }
 }
-
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
     os.path.join(BASE_DIR, 'ya-project-420219-734915ff79b4.json')
 )
