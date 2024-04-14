@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import get_token
 from rest_framework import status
 from rest_framework.views import APIView
@@ -52,6 +52,16 @@ class RegisterView(APIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class LogoutView(APIView):
+    def post(self, request):
+        if request.method == "POST":
+            if request.user.is_authenticated:
+                logout(request)
+                return Response({"message": "Logged out successfully."}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "User is not authenticated."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class CSRFView(APIView):
