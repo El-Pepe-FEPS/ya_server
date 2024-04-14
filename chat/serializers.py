@@ -21,10 +21,10 @@ class ChatSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         sender = self.context['request'].user
-        post_id = validated_data.get('post')
-        post = Post.objects.filter(id=post_id)
+        post = validated_data.get('post')
+        post = Post.objects.filter(id=post.id).first()
         recipient = post.user
-        return Post.objects.create(sender=sender, recipient=recipient, **validated_data)
+        return Chat.objects.create(sender=sender, recipient=recipient, **validated_data)
 
 
 class MessageSerializer(serializers.ModelSerializer):
