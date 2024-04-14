@@ -8,6 +8,9 @@ from .serializers import UserSerializer
 
 
 class LoginView(APIView):
+
+    def get(self, request):
+        return Response(UserSerializer(request.user).data)
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
